@@ -108,3 +108,23 @@ List<BoxShadow> defaultBoxShadow({
     )
   ];
 }
+
+
+/*------------------ Snackbar ------------------*/
+
+Color sSnackbarColor(BuildContext context) => Theme.of(context).primaryColor.withOpacity(0.8); // Colors.blueGrey[600]!;
+const double sSnackBarMaxWidth = 400;
+const double sSnackbarHeight = 50.0;
+const double sSnackbarBorderRadius = 25.0;
+BoxShadow sSnackbarShadow = BoxShadow(
+  color: Colors.black.withOpacity(0.2),
+  blurRadius: 4,
+  offset: const Offset(1, 1),
+);
+Color sSnackBarIcon = Colors.white;
+
+TextStyle sSnackbarText(BuildContext context) => Theme.of(context).textTheme.bodyLarge!.copyWith(
+  color: Colors.white.withOpacity(0.95),
+);
+
+EdgeInsets sSnackbarIconPadding = const EdgeInsets.only(top: 2);

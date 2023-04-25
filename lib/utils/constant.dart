@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 const passwordLengthGlobal = 8;
@@ -19,3 +21,35 @@ double tabletBreakpointGlobal = 600.0;
 double desktopBreakpointGlobal = 720.0;
 double statisticsItemWidth = 230.0;
 double defaultAppButtonElevation = 4.0;
+
+Platform platform = Platform();
+double? deviceWidth;
+double? deviceHeight;
+double? deviceShortestSide;
+Orientation? deviceOrientation;
+
+
+double menuWidth = 300; // deviceWidth * 0.6;
+double menuWidthDesktop = 300;
+double menuWidthTablet = 300;
+bool hideScaffoldAppBar = false;
+
+const double sGutterGap = 20.0;
+
+class Config{
+  /// APP COLORS
+  static final Color primaryColor = HexColor("#5c5ff5");
+  static final Color accentColor = HexColor("#5c5ffC");
+}
+
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF$hexColor";
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}

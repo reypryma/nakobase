@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constant.dart';
+
 const primaryColor = Color(0xffbafa34);
 const primaryDarkColor = Color(0xff0e0e16);
 const accentColor = Color(0xffffffff);
@@ -71,3 +73,6 @@ Color defaultAppButtonTextColorGlobal = textPrimaryColorGlobal;
 
 Color textPrimaryColorGlobal = textPrimaryColor;
 Color textSecondaryColorGlobal = textSecondaryColor;
+
+final kPrimaryColor = Config.primaryColor;
+final kAccentColor = Config.accentColor;

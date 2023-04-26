@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:nakobase/counter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nakobase/counter.dart';
+import 'package:nakobase/translations/supported_locales.dart';
+import 'package:nakobase/utils/colors.dart';
+import 'package:nakobase/utils/extra/SupaAppButton.dart';
+import 'package:nakobase/utils/styles.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,20 +17,24 @@ void main() async {
     anonKey: dotenv.get('SUPABASE_KEY'),
   );
 
-  runApp(const MyApp());
+  runApp(EasyLocalization(
+      supportedLocales: supportedLocales,
+      path: "translations",
+      fallbackLocale: const Locale("en"),
+      // assetLoader: const CodegenLoader(),
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: buildLightTheme(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -71,6 +78,18 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '${counter.counter}',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            AppButtonWidget(
+              height: 15,
+              // margin: EdgeInsets.all(5),
+              text: 'Change To Indonesia',
+              focusColor: primaryLight,
+              splashColor: primaryLight,
+              hoverColor: primaryLight,
+              width: MediaQuery.of(context).size.width,
             ),
           ],
         ),

@@ -1,10 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:nakobase/counter.dart';
+import 'package:nakobase/data/counter.dart';
+import 'package:nakobase/data/language.dart';
+import 'package:nakobase/translations/codegen_loader.g.dart';
+import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/translations/supported_locales.dart';
 import 'package:nakobase/utils/colors.dart';
 import 'package:nakobase/utils/extra/SupaAppButton.dart';
+import 'package:nakobase/utils/extra/text_style.dart';
 import 'package:nakobase/utils/styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,14 +23,14 @@ void main() async {
 
   runApp(EasyLocalization(
       supportedLocales: supportedLocales,
-      path: "translations",
+      path: "assets/translations",
       fallbackLocale: const Locale("en"),
-      // assetLoader: const CodegenLoader(),
+      assetLoader: const CodegenLoader(),
       child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -34,7 +38,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: buildLightTheme(),
+      theme: buildLightTheme(context),
+
+      //Localication
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      locale: context.locale,
+
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -65,6 +75,19 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          InkWell(
+            child: TextButton.icon(
+              icon: const Icon(Icons.settings, color: scaffoldColorDark),
+              onPressed: () async {
+                await updateLanguage(context);
+                setState(() {
+
+                });
+              }, label: Text(getISOLanguageInfo(Localizations.localeOf(context)) ?? 'English', style: textLato(context, 16, blackTrans95),),
+            ),
+          )
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -72,8 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              LocaleKeys.you_pushed_the_button.tr(),
             ),
             Text(
               '${counter.counter}',

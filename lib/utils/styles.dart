@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'extra/text_style.dart';
+
 /// basic colors
 const cStatusBarColor = Color.fromRGBO(20, 20, 20, 1.0);
 const cSystemNavigationColor = Color.fromRGBO(20, 20, 20, 1.0);
@@ -149,11 +151,12 @@ IconThemeData _customIconTheme4(IconThemeData original) {
   return original.copyWith(color: kGreyColor);
 }
 
-ThemeData buildLightTheme() {
+ThemeData buildLightTheme(BuildContext context) {
   final ThemeData base = ThemeData.light();
+  base.copyWith(textTheme: lightTextTheme(context),);
   return base.copyWith(
     cardColor: Colors.white,
-    textSelectionTheme: TextSelectionThemeData(
+    textSelectionTheme: const TextSelectionThemeData(
       selectionColor: kLightThemeTextColor,
       cursorColor: kLightAccent,
     ),

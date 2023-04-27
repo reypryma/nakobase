@@ -1,5 +1,6 @@
 {
   "AppTitle": "Supabase Application",
+  "you_pushed_the_button" : "You have pushed the button this many times:",
   "languages": {
     "english": "English",
     "indonesian": "Bahasa"

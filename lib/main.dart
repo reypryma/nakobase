@@ -4,6 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/counter.dart';
 import 'package:nakobase/data/language.dart';
+import 'package:nakobase/presentations/pages/login_page.dart';
+import 'package:nakobase/presentations/routes.dart';
+import 'package:nakobase/services/providers/menu_drawer_provider.dart';
 import 'package:nakobase/translations/codegen_loader.g.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/translations/supported_locales.dart';
@@ -12,6 +15,7 @@ import 'package:nakobase/utils/extra/SupaAppButton.dart';
 import 'package:nakobase/utils/extra/text_style.dart';
 import 'package:nakobase/utils/styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,14 +26,16 @@ void main() async {
     anonKey: dotenv.get('SUPABASE_KEY'),
   );
 
-  setUpDependencies();
+  // setUpDependencies();
+
+  await setUpDependencies();
 
   runApp(EasyLocalization(
       supportedLocales: supportedLocales,
       path: "assets/translations",
       fallbackLocale: const Locale("en"),
       assetLoader: const CodegenLoader(),
-      child: const MyApp()));
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -38,17 +44,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: buildLightTheme(context),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MenuDrawerProvider>(create: (_) => MenuDrawerProvider())
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: buildLightTheme(context),
 
-      //Localication
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      locale: context.locale,
-
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        //Localication
+        supportedLocales: context.supportedLocales,
+        localizationsDelegates: context.localizationDelegates,
+        locale: context.locale,
+        routes: Routes.getAll(),
+        home: const LoginPage(title: LocaleKeys.login),
+      ),
     );
   }
 }

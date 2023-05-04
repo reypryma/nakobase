@@ -11,5 +11,8 @@ class AppConstant{
   static const String isLoggedIn = 'isLoggedIn';
   static const String userKey = 'userKey';
 
+  ///ImagePath
+  static const String image = 'images/';
+  static const String imageTDM = 'images/tdm';
 
 }

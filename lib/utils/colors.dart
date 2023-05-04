@@ -76,3 +76,12 @@ Color textSecondaryColorGlobal = textSecondaryColor;
 
 final kPrimaryColor = Config.primaryColor;
 final kAccentColor = Config.accentColor;
+
+
+Color icScaffoldBgColor = const Color(0xFF464672);
+Color icLightBlue = const Color(0xFF4D4D7B);
+Color icWhiteColor = white;
+Color icNavyBlueColor = const Color(0xFF303065);
+Color icDarkBLue = Color(0xFF303065);
+Color icSkip = Colors.blue;
+Color icSecTextColor = Colors.white54;

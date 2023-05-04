@@ -101,17 +101,17 @@ ThemeData buildDarkTheme() {
     ),
     appBarTheme: AppBarTheme(
       elevation: 0,
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: kDarkAccent,
       ),
-      toolbarTextStyle: TextTheme(
+      toolbarTextStyle: const TextTheme(
         titleLarge: TextStyle(
           color: kLightBG1,
           fontSize: 18.0,
           fontWeight: FontWeight.w800,
         ),
       ).bodyMedium,
-      titleTextStyle: TextTheme(
+      titleTextStyle: const TextTheme(
         titleLarge: TextStyle(
           color: kLightBG1,
           fontSize: 18.0,
@@ -119,7 +119,7 @@ ThemeData buildDarkTheme() {
         ),
       ).titleLarge,
     ),
-    colorScheme: ColorScheme(
+    colorScheme: const ColorScheme(
       background: kDarkBG,
       primary: kTeal100,
       secondary: kTeal50,
@@ -175,17 +175,17 @@ ThemeData buildLightTheme(BuildContext context) {
     scaffoldBackgroundColor: kLightBG2,
     appBarTheme: AppBarTheme(
       elevation: 0,
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: kLightAccent,
       ),
-      toolbarTextStyle: TextTheme(
+      toolbarTextStyle: const TextTheme(
         titleLarge: TextStyle(
           color: kDarkBG,
           fontSize: 18.0,
           fontWeight: FontWeight.w800,
         ),
       ).bodyMedium,
-      titleTextStyle: TextTheme(
+      titleTextStyle: const TextTheme(
         titleLarge: TextStyle(
           color: kDarkBG,
           fontSize: 18.0,

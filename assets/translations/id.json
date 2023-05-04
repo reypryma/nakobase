@@ -4,5 +4,39 @@
   "languages": {
     "english": "Inggris",
     "indonesian": "Indonesia"
-  }
+  },
+
+  "login_to_continue": "Masuk untuk melanjutkan",
+  "create_account": "Buat Akun",
+  "dont_have_account": "tidak punya akun {}?  ",
+  "already_have_account": "sudah ada {}?  ",
+  "welcome_back": "Selamat Datang Kembali",
+
+  "google": "Google",
+  "login": "Masuk",
+  "signup": "Daftar",
+  "logout": "Keluar",
+  "profile": "Profil",
+
+
+  "add_gallery": "Tambah Galeri",
+  "gallery": "Galeri",
+  "delete_gallery": "Delete Galeri",
+  "delete": "Hapus",
+  "create": "Buat",
+  "update": "Perbarui",
+
+  "name": "Nama",
+  "email": "Email",
+  "Password": "Kata sandi",
+  "or": "atau",
+  "submit": "Kirim",
+
+  "input_email": "masukkan email",
+  "input_password": "masukkan password",
+  "input_name": "masukkan username",
+
+  "enter_valid_mail": "masukkan email yang valid",
+  "enter_valid_username": "Format Username Salah",
+  "wrong_password": "Password tidak cocok"
 }

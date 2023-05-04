@@ -4,7 +4,7 @@ import 'package:nakobase/services/supabase_service.dart';
 
 GetIt injector = GetIt.instance;
 
-void setUpDependencies(){
+Future setUpDependencies() async{
     injector.registerLazySingleton<SupabaServiceContract>(() => SupabaseServiceImp());
 
 }

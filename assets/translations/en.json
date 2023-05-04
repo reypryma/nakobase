@@ -4,5 +4,39 @@
   "languages": {
     "english": "English",
     "indonesian": "Bahasa"
-  }
+  },
+
+  "login_to_continue": "Login to Continue",
+  "create_account": "Create Account",
+  "dont_have_account": "don't have {} account?  ",
+  "already_have_account": "Have {} account?  ",
+  "welcome_back": "Welcome Back",
+
+  "google": "Google",
+  "login": "Login",
+  "signup": "Sign Up",
+  "logout": "Logout",
+  "profile": "Profile",
+
+
+  "add_gallery": "Add Gallery",
+  "Gallery": "Gallery",
+  "delete_gallery": "Delete Gallery",
+  "delete": "Delete",
+  "create": "Create",
+  "Update": "Update",
+
+  "name": "Name",
+  "email": "Email",
+  "Password": "Password",
+  "or": "or",
+  "submit": "Submit",
+
+  "input_email": "input your email",
+  "input_password": "input your password",
+  "input_name": "input your name",
+
+  "enter_valid_mail": "Enter Valid Mail",
+  "enter_valid_username": "Enter Valid Username",
+  "wrong_password": "Incorrect password"
 }

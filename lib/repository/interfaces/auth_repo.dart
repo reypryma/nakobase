@@ -3,7 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 abstract class AuthRepository{
   Future<User?> getCurrentUser();
   Future<bool> logOut();
-  Future<void> login({String email, String password});
-  Future<void> loginWithSocial();
-  Future<String> setToken();
+  Future<void> loginWithEmail({required String email,required String password});
+  Future<void> signUpWithEmail ({required String email,required String password, required String fullName});
+  Future<void> loginWithGoogle();
+  Future<String> setSession();
 }

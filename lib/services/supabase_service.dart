@@ -6,7 +6,17 @@ class SupabaseServiceImp implements SupabaServiceContract {
   final supabaseClient = Supabase.instance.client;
 
   @override
-  Future<SupabaseClient> init() async {
+  SupabaseClient init() {
     return supabaseClient;
+  }
+
+  @override
+  Future<bool> checkSession() async{
+    final session = supabaseClient.auth.currentSession;
+    if (session != null) {
+      return true;
+    }else{
+      return false;
+    }
   }
 }

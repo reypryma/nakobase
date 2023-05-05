@@ -6,6 +6,6 @@ GetIt injector = GetIt.instance;
 
 Future setUpDependencies() async{
     injector.registerLazySingleton<SupabaServiceContract>(() => SupabaseServiceImp());
-
 }
 
+final supabaseService = injector.get<SupabaServiceContract>();

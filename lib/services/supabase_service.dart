@@ -2,7 +2,7 @@ import 'package:nakobase/services/contracts/supabase_contract.dart';
 import 'package:supabase/src/supabase_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseServiceImp implements SupabaServiceContract {
+class SupabaseServiceImp implements SupabaseServiceContract {
   final supabaseClient = Supabase.instance.client;
 
   @override
@@ -11,7 +11,7 @@ class SupabaseServiceImp implements SupabaServiceContract {
   }
 
   @override
-  Future<bool> checkSession() async{
+  bool checkSession(){
     final session = supabaseClient.auth.currentSession;
     if (session != null) {
       return true;

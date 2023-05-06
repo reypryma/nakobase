@@ -6,7 +6,7 @@ import 'package:nakobase/repository/interfaces/auth_repo.dart';
 import 'package:nakobase/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthRepoImpl extends AuthRepository{
+class AuthRepositoryImpl implements AuthRepositoryInterface{
   SupabaseClient supabase = supabaseService.init();
 
   User? user;
@@ -35,9 +35,11 @@ class AuthRepoImpl extends AuthRepository{
   }
 
   @override
-  Future<String> setSession() {
-    // TODO: implement setToken
-    throw UnimplementedError();
+  Future<String?> setSession() async {
+      supabase.auth.onAuthStateChange.listen((data) {
+        session = data.session;
+      });
+      return supabase.auth.currentSession?.accessToken;
   }
 
   @override
@@ -56,21 +58,5 @@ class AuthRepoImpl extends AuthRepository{
     } catch (error) {
         throw 'Unexpected error occurred $error';
     }
-  }
-}
-
-extension ShowSnackBar on BuildContext {
-  void showSnackBar({
-    required String message,
-    Color backgroundColor = Colors.white,
-  }) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(
-      content: Text(message),
-      backgroundColor: backgroundColor,
-    ));
-  }
-
-  void showErrorSnackBar({required String message}) {
-    showSnackBar(message: message, backgroundColor: Colors.red);
   }
 }

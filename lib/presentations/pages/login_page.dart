@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/nsimages.dart';
 import 'package:nakobase/presentations/components/app_bar.dart';
 import 'package:nakobase/presentations/components/app_button.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/presentations/routes.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
+import 'package:nakobase/utils/extra/CustomSnackBar.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
 
 import '../../utils/colors.dart';
@@ -137,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 80),
-                nakoAppButton(context, LocaleKeys.login_to_continue.tr(), () {
+                nakoAppButton(context, LocaleKeys.login_to_continue.tr(), () async {
 
                 }),
                 const SizedBox(height: 40),
@@ -157,8 +159,16 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(0)),
                     side: BorderSide(color: Colors.grey[300]!),
                   ),
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.dashboard);
+                  onTap: () async {
+                    try {
+                      await authRepository.loginWithGoogle();
+                      if (!mounted) {
+                        return;
+                      }
+                      Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
+                    } catch (e) {
+                      customSnackBar(context, '$e');
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

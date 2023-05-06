@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class SupabaServiceContract{
+abstract class SupabaseServiceContract{
   SupabaseClient init();
-  Future<bool> checkSession();
+  bool checkSession();
 }

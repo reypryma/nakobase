@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/presentations/components/app_bar.dart';
 import 'package:nakobase/presentations/components/app_button.dart';
+import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/extra/StringExtensions.dart';
@@ -31,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isCPasswordVisible = true;
   bool isCPasswordIconVisible = false;
   bool isConfirmBtnEnable = false;
+  bool autoValidate = false;
 
   TextEditingController passCtrl = TextEditingController();
   TextEditingController cPassCtrl = TextEditingController();
@@ -49,20 +52,53 @@ class _RegisterPageState extends State<RegisterPage> {
   init() async {}
 
   @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passCtrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
   void setState(VoidCallback fn) {
     super.setState(fn);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    IconButton iconButtonPassword(){
+    IconButton iconButtonPassword() {
       return IconButton(
-          icon: isPasswordVisible ? const Icon(Icons.visibility_off, color: blackTrans90) : const Icon(Icons.visibility, color: blackTrans90),
+          icon: isPasswordVisible
+              ? const Icon(Icons.visibility_off, color: blackTrans90)
+              : const Icon(Icons.visibility, color: blackTrans90),
           onPressed: () {
             isPasswordVisible = !isPasswordVisible;
             setState(() {});
           });
+    }
+
+    validateForm() async {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        await authRepository.signUpWithEmail(
+            email: emailController.text.trim(),
+            password: passCtrl.text.trim(),
+            fullName: nameController.text.trim());
+        if (!mounted) {
+          return;
+        }
+        showCustomSnackBar('Success', context, isError: false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.login, (route) => false,
+            arguments: LocaleKeys.login);
+      } else {
+        showCustomSnackBar(
+          'Error',
+          context,
+        );
+        autoValidate = true;
+      }
     }
 
     return Scaffold(
@@ -75,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: AutovalidateMode.always,
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -150,8 +186,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text('Password', style: boldTextStyle(color: black)),
                 const SizedBox(height: 10),
                 Container(
-                  padding:
-                      const EdgeInsets.only(left: 16, bottom: 2, right: 8, top: 4),
+                  padding: const EdgeInsets.only(
+                      left: 16, bottom: 2, right: 8, top: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: icScaffoldBgColor,
@@ -163,10 +199,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     focusNode: pwdFocus,
                     textInputAction: TextInputAction.next,
                     obscureText: isPasswordVisible ? true : false,
-                    style:
-                        secondaryTextStyle(color: appBarBackgroundColorGlobal, size: 20),
+                    style: secondaryTextStyle(
+                        color: appBarBackgroundColorGlobal, size: 20),
                     decoration: passwordInput(
-                        iconButton: iconForPasswordNoButton(isIconVisible: isPasswordIconVisible, iconButton: iconButtonPassword())),
+                        iconButton: iconForPasswordNoButton(
+                            isIconVisible: isPasswordIconVisible,
+                            iconButton: iconButtonPassword())),
                     onFieldSubmitted: (val) {
                       pwdFocus!.unfocus();
                       FocusScope.of(context).requestFocus(cPwdFocus);
@@ -188,14 +226,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                nakoAppButton(context, LocaleKeys.create_account.tr(), (){
-                  Navigator.popAndPushNamed(context, Routes.login, arguments: LocaleKeys.login);
+                nakoAppButton(context, LocaleKeys.create_account.tr(),
+                    () async {
+                  await validateForm();
                 }),
                 const SizedBox(height: 40),
                 Row(
                   children: [
                     const Expanded(child: Divider(endIndent: 10)),
-                    Text(LocaleKeys.or.tr().toUpperCase(), style: secondaryTextStyle()),
+                    Text(LocaleKeys.or.tr().toUpperCase(),
+                        style: secondaryTextStyle()),
                     const Expanded(child: Divider(indent: 10)),
                   ],
                 ),
@@ -208,13 +248,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(0)),
                     side: BorderSide(color: Colors.grey[300]!),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    validateForm();
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(AppImages.googleIcon, height: 24, width: 24),
                       const SizedBox(width: 8),
-                      Text("${LocaleKeys.signup.tr()} with Google", style: boldTextStyle()),
+                      Text("${LocaleKeys.signup.tr()} with Google",
+                          style: boldTextStyle()),
                     ],
                   ),
                 ),

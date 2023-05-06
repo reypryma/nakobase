@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/menu_drawer.dart';
+import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/routes.dart';
 import 'package:nakobase/services/providers/menu_drawer_provider.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
@@ -11,23 +13,26 @@ import 'package:provider/provider.dart';
 /// Drawer state defines the current drawer state on app
 enum DrawerState { open, closed, opening, closing }
 
-class CustomDrawerController extends ChangeNotifier{
+class CustomDrawerController extends ChangeNotifier {
   final TickerProvider? vsync;
   final Duration duration;
   late final AnimationController _animationController;
   DrawerState state = DrawerState.closed;
 
-  CustomDrawerController({@required this.vsync, this.duration = const Duration(milliseconds: 250)}){
-    _animationController = AnimationController(vsync: vsync!, duration: duration);
+  CustomDrawerController(
+      {@required this.vsync,
+      this.duration = const Duration(milliseconds: 250)}) {
+    _animationController =
+        AnimationController(vsync: vsync!, duration: duration);
     _initController();
   }
 
-  void _initController(){
+  void _initController() {
     _animationController.addListener(() {
       notifyListeners();
     });
     _animationController.addStatusListener((status) {
-      switch(status){
+      switch (status) {
         case AnimationStatus.forward:
           state = DrawerState.opening;
           break;
@@ -70,7 +75,6 @@ class CustomDrawerController extends ChangeNotifier{
       open();
     }
   }
-
 }
 
 class DrawerWrapper extends StatefulWidget {
@@ -82,14 +86,22 @@ class DrawerWrapper extends StatefulWidget {
   final Color backgroundColor;
   final Widget child;
 
-  const DrawerWrapper({Key? key, required this.controller, this.hideOnContentTap = true, this.cornerRadius = 8.0, required this.drawerItems, this.itemGap = 10.0, this.backgroundColor = successIcon, required this.child}) : super(key: key);
+  const DrawerWrapper(
+      {Key? key,
+      required this.controller,
+      this.hideOnContentTap = true,
+      this.cornerRadius = 8.0,
+      required this.drawerItems,
+      this.itemGap = 10.0,
+      this.backgroundColor = successIcon,
+      required this.child})
+      : super(key: key);
 
   @override
   State<DrawerWrapper> createState() => _DrawerWrapperState();
 }
 
 class _DrawerWrapperState extends State<DrawerWrapper> {
-
   @override
   void initState() {
     super.initState();
@@ -101,10 +113,17 @@ class _DrawerWrapperState extends State<DrawerWrapper> {
     final cornerRadius = widget.cornerRadius * widget.controller.percentOpen;
 
     return Transform(
-      transform: Matrix4.translationValues(slideAmount, 0.0, 0.0)..scale(contentScale, contentScale),
+      transform: Matrix4.translationValues(slideAmount, 0.0, 0.0)
+        ..scale(contentScale, contentScale),
       alignment: Alignment.centerLeft,
       child: Container(
-        decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), offset: const Offset(0.0, 4.0), blurRadius: 40.0, spreadRadius: 10.0)]),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              offset: const Offset(0.0, 4.0),
+              blurRadius: 40.0,
+              spreadRadius: 10.0)
+        ]),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(cornerRadius),
           child: GestureDetector(
@@ -129,7 +148,8 @@ class _DrawerWrapperState extends State<DrawerWrapper> {
           height: double.infinity,
           color: widget.backgroundColor,
           child: Padding(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 8),
+            padding:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width / 8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,12 +159,14 @@ class _DrawerWrapperState extends State<DrawerWrapper> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: widget.drawerItems.asMap().entries.map((item) {
                     return InkWell(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           if (kDebugMode) {
                             print("tap");
                           }
-                          Provider.of<MenuDrawerProvider>(context, listen: false).selectedItem = item.key;
+                          Provider.of<MenuDrawerProvider>(context,
+                                  listen: false)
+                              .selectedItem = item.key;
                           widget.controller.close();
                         });
                       },
@@ -156,10 +178,22 @@ class _DrawerWrapperState extends State<DrawerWrapper> {
                   }).toList(),
                 ),
                 InkWell(
-                    onTap: (){
-                      Navigator.pushNamedAndRemoveUntil(context, Routes.login, (Route<dynamic> route) => false,arguments: LocaleKeys.welcome_back);
+                    onTap: () async {
+                      try {
+                        await authRepository.logOut();
+                        if (!mounted) {
+                          return;
+                        }
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.login,
+                                (Route<dynamic> route) => false,
+                            arguments: LocaleKeys.welcome_back);
+                      } catch (e) {
+                        showCustomSnackBar('$e', context);
+                      }
                     },
-                    child: TextMenu(menuText: LocaleKeys.logout.tr(),)),
+                    child: TextMenu(
+                      menuText: LocaleKeys.logout.tr(),
+                    )),
               ],
             ),
           ),

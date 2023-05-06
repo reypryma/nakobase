@@ -4,8 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/counter.dart';
 import 'package:nakobase/data/language.dart';
+import 'package:nakobase/presentations/pages/dashboard_screen.dart';
 import 'package:nakobase/presentations/pages/login_page.dart';
 import 'package:nakobase/presentations/routes.dart';
+import 'package:nakobase/services/contracts/supabase_contract.dart';
 import 'package:nakobase/services/providers/menu_drawer_provider.dart';
 import 'package:nakobase/translations/codegen_loader.g.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
         localizationsDelegates: context.localizationDelegates,
         locale: context.locale,
         routes: Routes.getAll(),
-        home: const LoginPage(title: LocaleKeys.login),
+        home: (!supabaseService.checkSession()) ? const LoginPage(title: LocaleKeys.login) : DashboardScreen(),
       ),
     );
   }

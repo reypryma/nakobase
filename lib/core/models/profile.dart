@@ -10,7 +10,7 @@ class Profile{
   Profile({this.id, this.username, this.fullName, this.avatarUrl, this.website,
       this.updatedAt});
 
-  factory Profile.fromJson(Map<dynamic, dynamic> json){
+  factory Profile.fromJson(Map<String, dynamic> json){
     return Profile(
       id: json['id'],
       username: json['username'],

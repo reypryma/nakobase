@@ -1,19 +1,16 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:nakobase/core/api_constant.dart';
 import 'package:nakobase/core/service_locator.dart';
-import 'package:nakobase/repository/interfaces/auth_repo.dart';
-import 'package:nakobase/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'interfaces/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepositoryInterface{
   SupabaseClient supabase = supabaseService.init();
-
-  User? user;
   Session? session;
 
   @override
-  Future<User?> getCurrentUser() async {
+  User? getCurrentUser() {
     final user = supabase.auth.currentUser!;
     return user;
   }
@@ -22,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepositoryInterface{
   Future<bool> logOut() async {
     try {
       await supabase.auth.signOut();
-    } on Exception catch (e) {
+    } on Exception {
       return false;
     }
     return true;

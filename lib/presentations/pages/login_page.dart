@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: Border.all(width: .5, color: kTeal100)
                   ),
                   child: TextFormField(
-                    style: const TextStyle(color: lightGray),
+                    style: const TextStyle(color: black),
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: buildInputDecoration(
@@ -140,7 +140,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 80),
                 nakoAppButton(context, LocaleKeys.login_to_continue.tr(), () async {
-
+                  authRepository.loginWithEmail(email: emailController.text.trim(), password: passwordController.text.trim()).then((value){
+                    customSnackBar(context, 'Success to login');
+                    Navigator.popAndPushNamed(context, Routes.dashboard);
+                  }).onError((error, stackTrace){
+                    customSnackBar(context, "Error on login");
+                  });
                 }),
                 const SizedBox(height: 40),
                 Row(

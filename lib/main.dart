@@ -19,25 +19,31 @@ import 'package:nakobase/utils/styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
-  await Supabase.initialize(
+  /*await Supabase.initialize(
     url: dotenv.get('SUPABASE_URL'),
     anonKey: dotenv.get('SUPABASE_KEY'),
   );
+  */
+
+  await Supabase.initialize(
+    url: 'https://floiadiqmoraoncjfzpy.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsb2lhZGlxbW9yYW9uY2pmenB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODIwMTM0MTgsImV4cCI6MTk5NzU4OTQxOH0.pdCtxqxjxLlQjd-b0gnOaj-oWjDjVO7Xu2UrP1rxF5Y',
+  ).then((value) => setUpDependencies());
 
   // setUpDependencies();
 
-  await setUpDependencies();
+  // await setUpDependencies();
 
   runApp(EasyLocalization(
       supportedLocales: supportedLocales,
       path: "assets/translations",
       fallbackLocale: const Locale("en"),
       assetLoader: const CodegenLoader(),
-      child: MyApp()));
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

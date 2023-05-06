@@ -1,3 +1,6 @@
+
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nakobase/presentations/extensions/widget_extension.dart';
@@ -5,8 +8,12 @@ import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/colors.dart';
 import 'package:nakobase/utils/commons.dart';
 import 'package:nakobase/utils/extra/CustomSnackBar.dart';
+import 'package:nakobase/utils/extra/StringExtensions.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../core/models/profile.dart';
+import '../../core/service_locator.dart';
 import '../../utils/styles.dart';
 import '../components/app_button.dart';
 import '../components/dialog.dart';
@@ -19,6 +26,30 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // User? currentUser;
+  // Profile? profile;
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  // init() async {
+  //   currentUser = authRepository.getCurrentUser();
+  //   await profileRepository
+  //       .getUserProfile()
+  //       .then((value) => profile = value)
+  //       .catchError((e) {
+  //     print("profie: ${profile?.fullName}");
+  //     return e;
+  //   });
+  // }
+
+  init() async{
+    await profileRepository.getUserProfile().then((value) => print('Got the user profile ${value}'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +59,43 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(LocaleKeys.profile.tr(), style: boldTextStyle(size: 25, color: icNavyBlueColor),),
-              const SizedBox(height: 30,),
+              Text(
+                LocaleKeys.profile.tr(),
+                style: boldTextStyle(size: 25, color: icNavyBlueColor),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
               Stack(
                 alignment: Alignment.topCenter,
                 children: [
                   commonCachedNetworkImage(
+                    // profile?.avatarUrl,
                     '',
                     fit: BoxFit.cover,
-                    height: 100,
-                    width: 100,
+                    height: 150,
+                    width: 150,
                   ).cornerRadiusWithClipRRect(45),
+                  Positioned(
+                    bottom: 10,
+                    left: 100,
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: SHPrimaryColor,
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon:
+                            const Icon(Icons.camera_alt_outlined, color: white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               ).center(),
             ],

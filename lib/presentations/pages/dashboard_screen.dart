@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/menu_drawer.dart';
 import '../../utils/colors.dart';
+import '../../utils/styles.dart';
 import '../components/app_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -57,6 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     final int selectedIndex = Provider.of<MenuDrawerProvider>(context, listen: false).selectedItem;
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: kTeal50,
       body: DrawerWrapper(
         controller: _controller!,
         drawerItems: Provider.of<MenuDrawerProvider>(context, listen: false).listMenus(),

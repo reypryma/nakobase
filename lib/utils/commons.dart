@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../data/nsimages.dart';
 import 'extra/StringExtensions.dart';
 
 import 'colors.dart';
@@ -51,11 +52,11 @@ extension BooleanExtensions on bool? {
 
 
 EdgeInsets dynamicAppButtonPadding(BuildContext context) {
-  return EdgeInsets.symmetric(vertical: 14, horizontal: 16);
+  return const EdgeInsets.symmetric(vertical: 14, horizontal: 16);
 }
 
 Widget inkWellWidget({Function()? onTap, required Widget child}) {
-  return InkWell(onTap: onTap, child: child, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent);
+  return InkWell(onTap: onTap, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent, child: child);
 }
 
 Widget commonCachedNetworkImage(
@@ -80,7 +81,7 @@ Widget commonCachedNetworkImage(
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
       },
       placeholder: (_, s) {
-        if (!usePlaceholderIfUrlEmpty) return SizedBox();
+        if (!usePlaceholderIfUrlEmpty) return const SizedBox();
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
       },
     );
@@ -90,7 +91,7 @@ Widget commonCachedNetworkImage(
 }
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('images/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center);
+  return Image.asset(AppImages.defaultAvatar, height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center);
 }
 
 List<BoxShadow> defaultBoxShadow({

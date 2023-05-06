@@ -14,7 +14,8 @@ class AppConstant{
 
   ///ImagePath
   static const String image = 'images/';
-  static const String imageTDM = 'images/tdm';
+  static const String imageTDM = 'images/tdm/';
+  static const String imageAvatar = 'images/avatar/';
 
   ///supabase callback
   static const String callBackURL = 'io.supabase.nakobase://login-callback';

@@ -62,6 +62,7 @@ flutter:
     - images/
     - images/icons/
     - images/flag/
+    - images/avatar/
     - images/tdm/
     - assets/translations/
 

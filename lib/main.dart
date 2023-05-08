@@ -7,8 +7,8 @@ import 'package:nakobase/data/language.dart';
 import 'package:nakobase/presentations/pages/dashboard_screen.dart';
 import 'package:nakobase/presentations/pages/login_page.dart';
 import 'package:nakobase/presentations/routes.dart';
-import 'package:nakobase/services/contracts/supabase_contract.dart';
 import 'package:nakobase/services/providers/menu_drawer_provider.dart';
+import 'package:nakobase/services/providers/task_status_provider.dart';
 import 'package:nakobase/translations/codegen_loader.g.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/translations/supported_locales.dart';
@@ -54,7 +54,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<MenuDrawerProvider>(create: (_) => MenuDrawerProvider())
+        ChangeNotifierProvider<MenuDrawerProvider>(create: (_) => menuDrawerProvider),
+        ChangeNotifierProvider<TaskStatusProvider>(create: (_) => TaskStatusProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

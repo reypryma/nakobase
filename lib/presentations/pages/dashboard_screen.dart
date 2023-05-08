@@ -1,9 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nakobase/presentations/components/custom_drawer.dart';
-import 'package:nakobase/presentations/pages/gallery/list_gallery_page.dart';
 import 'package:nakobase/presentations/pages/profile_page.dart';
+import 'package:nakobase/presentations/pages/todo/list_todo_page.dart';
 import 'package:nakobase/services/providers/menu_drawer_provider.dart';
+import 'package:nakobase/services/providers/task_status_provider.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   int selectedItem = 0;
 
   final tabs = [
-    ListGalleryPage(),
-    ProfilePage(),
+    const ListTodoPage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -46,6 +47,12 @@ class _DashboardScreenState extends State<DashboardScreen>
       ..addListener(() {
         setState(() {});
       });
+
+    try {
+      await Provider.of<TaskStatusProvider>(context, listen: false).getStatusList();
+    } catch (e) {
+      print('Error fetch task status $e');
+    }
   }
 
   @override

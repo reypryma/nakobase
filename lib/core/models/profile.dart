@@ -27,7 +27,8 @@ class Profile{
     if (username != null) data['username'] = username;
     if (fullName != null) data['full_name'] = fullName;
     if (avatarUrl != null) data['avatar_url'] = avatarUrl;
-    if (website != null) data['avatar_url'] = website;
+    if (website != null) data['website'] = website;
+    if (updatedAt != null) data['updated_at'] = website;
     return data;
   }
 }

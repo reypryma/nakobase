@@ -14,27 +14,29 @@ dependencies:
     sdk: flutter
 
 
-  google_fonts: ^4.0.3
+  google_fonts: ^4.0.4
 
-  supabase_flutter: ^1.7.0
+  supabase_flutter: ^1.8.1
   shared_preferences: ^2.1.0
   easy_localization: ^3.0.1
 
+  #Snippet
+  shimmer: ^2.0.0
 
   # hide password from ui
   flutter_dotenv: ^5.0.2
 
   # state management
   provider: ^6.0.5
-  get_it: ^7.2.0
+  get_it: ^7.4.1
 
   # IMAGE
   cached_network_image: ^3.2.3
   image_picker: ^0.8.7+4
 
   # CONNECTIVITY
-  http: ^0.13.5
-  connectivity_plus: ^3.0.4
+  http: ^0.13.6
+  connectivity_plus: ^3.0.6
   url_launcher: ^6.1.10
   cupertino_icons: ^1.0.5
 

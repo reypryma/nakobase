@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:nakobase/presentations/pages/dashboard_screen.dart';
-import 'package:nakobase/presentations/pages/gallery/create_gallery_page.dart';
-import 'package:nakobase/presentations/pages/gallery/edit_gallery_page.dart';
-import 'package:nakobase/presentations/pages/gallery/list_gallery_page.dart';
 import 'package:nakobase/presentations/pages/login_page.dart';
 import 'package:nakobase/presentations/pages/profile_page.dart';
 import 'package:nakobase/presentations/pages/register_page.dart';
+import 'package:nakobase/presentations/pages/todo/create_gallery_page.dart';
+import 'package:nakobase/presentations/pages/todo/edit_gallery_page.dart';
+import 'package:nakobase/presentations/pages/todo/list_todo_page.dart';
 
 class Routes{
   static Map<String, WidgetBuilder> getAll() => _routes;
@@ -28,7 +28,7 @@ class Routes{
       dashboard: (BuildContext context) => DashboardScreen(),
 
       // Gallery
-      main_gallery: (BuildContext context) => const ListGalleryPage(),
+      main_gallery: (BuildContext context) => const ListTodoPage(),
       edit_gallery: (BuildContext ctx) => const EditGalleryPage(),
       create_gallery: (BuildContext ctx) => const CreateGalleryPage(),
 

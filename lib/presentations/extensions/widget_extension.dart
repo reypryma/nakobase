@@ -36,4 +36,12 @@ extension WidgetExtension on Widget?{
       child: this,
     );
   }
+
+  Widget visible(bool visible, {Widget? defaultWidget}) {
+    return visible ? this! : (defaultWidget ?? const SizedBox());
+  }
+
+  /// add Expanded to parent widget
+  Widget expand({flex = 1}) => Expanded(flex: flex, child: this!);
+
 }

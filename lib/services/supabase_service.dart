@@ -23,7 +23,7 @@ class SupabaseServiceImp implements SupabaseServiceContract {
       final expirationTimeStamp = session.expiresAt;
       final expirationTime = DateTime.fromMillisecondsSinceEpoch(session.expiresAt! * 1000);
 
-      print('Expiration Time : ${expirationTimeStamp} so the expiration: ${expirationTime}, check: ${expirationTime.isAfter(currentTime)}');
+      print('Expiration Time : $expirationTimeStamp so the expiration: ${expirationTime}, check: ${expirationTime.isAfter(currentTime)}');
 
       if(expirationTime.isAfter(currentTime)){
         print('refresh session');

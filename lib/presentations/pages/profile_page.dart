@@ -1,16 +1,13 @@
-
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:nakobase/presentations/components/circular.dart';
+import 'package:nakobase/presentations/components/shimmer_layout.dart';
 import 'package:nakobase/presentations/extensions/widget_extension.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/colors.dart';
 import 'package:nakobase/utils/commons.dart';
 import 'package:nakobase/utils/extra/CustomSnackBar.dart';
-import 'package:nakobase/utils/extra/StringExtensions.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/models/profile.dart';
 import '../../core/service_locator.dart';
@@ -27,7 +24,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // User? currentUser;
-  // Profile? profile;
+  Profile? profile;
+  bool isLoading = true;
+  double hBox = 30;
 
   @override
   void initState() {
@@ -46,12 +45,33 @@ class _ProfilePageState extends State<ProfilePage> {
   //   });
   // }
 
-  init() async{
-    await profileRepository.getUserProfile().then((value) => print('Got the user profile ${value}'));
+  init() async {
+    profile = await profileRepository.getUserProfile().whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget shimmeringInfo(String? infoProfile, {double? hWidth}) {
+      return !isLoading
+          ? Text(
+        infoProfile ?? "not found",
+        style: secondaryTextStyle(color: kDarkBgDark, size: 18),
+      )
+          : ShimmerTextComponent(
+        width: hWidth ?? MediaQuery.of(context).size.width * .4,
+        height: hBox,
+      );
+    }
+
     return Scaffold(
       backgroundColor: kTeal50,
       body: SingleChildScrollView(
@@ -66,38 +86,46 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 30,
               ),
-              Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  commonCachedNetworkImage(
-                    // profile?.avatarUrl,
-                    '',
-                    fit: BoxFit.cover,
-                    height: 150,
-                    width: 150,
-                  ).cornerRadiusWithClipRRect(45),
-                  Positioned(
-                    bottom: 10,
-                    left: 100,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: SHPrimaryColor,
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon:
-                            const Icon(Icons.camera_alt_outlined, color: white),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ).center(),
+              isLoading
+                  ? progressIndicator()
+                  : Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        commonCachedNetworkImage(
+                          // profile?.avatarUrl,
+                          profile?.avatarUrl ?? '',
+                          fit: BoxFit.cover,
+                          height: 150,
+                          width: 150,
+                        ).cornerRadiusWithClipRRect(45),
+                        Positioned(
+                          bottom: 10,
+                          left: 100,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: SHPrimaryColor,
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.camera_alt_outlined,
+                                  color: white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ).center(),
+              const SizedBox(
+                height: 20,
+              ),
+              shimmeringInfo(profile?.fullName ?? 'Loading Username'),
+              const SizedBox(height: 20),
+              shimmeringInfo(profile?.website?? 'no website'),
             ],
           )),
       bottomNavigationBar: AppButton(

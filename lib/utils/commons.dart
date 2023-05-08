@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:nakobase/presentations/extensions/widget_extension.dart';
 import '../data/nsimages.dart';
 import 'extra/StringExtensions.dart';
 
@@ -109,6 +110,130 @@ List<BoxShadow> defaultBoxShadow({
     )
   ];
 }
+
+
+Decoration boxDecorationDefault({
+  BorderRadiusGeometry? borderRadius,
+  Color? color,
+  Gradient? gradient,
+  BoxBorder? border,
+  BoxShape? shape,
+  BlendMode? backgroundBlendMode,
+  List<BoxShadow>? boxShadow,
+  DecorationImage? image,
+}) {
+  return BoxDecoration(
+    borderRadius: (shape != null && shape == BoxShape.circle)
+        ? null
+        : (borderRadius ?? radius()),
+    boxShadow: boxShadow ?? defaultBoxShadow(),
+    color: color ?? Colors.white,
+    gradient: gradient,
+    border: border,
+    shape: shape ?? BoxShape.rectangle,
+    backgroundBlendMode: backgroundBlendMode,
+    image: image,
+  );
+}
+
+
+
+/*------------------ Setting Item Widget ------------------*/
+class SettingItemWidget extends StatelessWidget {
+  final String title;
+  final double? width;
+  final String? subTitle;
+  final Widget? leading;
+  final Widget? trailing;
+  final TextStyle? titleTextStyle;
+  final TextStyle? subTitleTextStyle;
+  final Function? onTap;
+  final EdgeInsets? padding;
+  final int paddingAfterLeading;
+  final int paddingBeforeTrailing;
+  final Color? titleTextColor;
+  final Color? subTitleTextColor;
+  final Color? hoverColor;
+  final Color? splashColor;
+  final Decoration? decoration;
+  final double? borderRadius;
+  final BorderRadius? radius;
+
+  SettingItemWidget({
+    required this.title,
+    this.onTap,
+    this.width,
+    this.subTitle = '',
+    this.leading,
+    this.trailing,
+    this.titleTextStyle,
+    this.subTitleTextStyle,
+    this.padding,
+    this.paddingAfterLeading = 16,
+    this.paddingBeforeTrailing = 16,
+    this.titleTextColor,
+    this.subTitleTextColor,
+    this.decoration,
+    this.borderRadius = 8,
+    this.hoverColor,
+    this.splashColor,
+    this.radius,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap as void Function()?,
+      borderRadius: radius ?? (BorderRadius.circular(borderRadius!)),
+      hoverColor: hoverColor,
+      splashColor: splashColor,
+      child: Container(
+        width: width,
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: decoration ?? const BoxDecoration(),
+        child: Row(
+          children: [
+            leading ?? const SizedBox(),
+            if (leading != null) SizedBox(width: paddingAfterLeading.toDouble()),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title.validate(),
+                  style: titleTextStyle ??
+                      boldTextStyle(
+                          color: titleTextColor ?? textPrimaryColorGlobal),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.toDouble()).visible(subTitle.validate().isNotEmpty),
+                if (subTitle.validate().isNotEmpty)
+                  Text(
+                    subTitle!,
+                    style: subTitleTextStyle ??
+                        secondaryTextStyle(
+                          color: subTitleTextColor ?? textSecondaryColorGlobal,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ).expand(),
+            if (trailing != null) SizedBox(width: paddingBeforeTrailing.toDouble(),),
+            trailing ?? const SizedBox(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
 
 
 /*------------------ Snackbar ------------------*/

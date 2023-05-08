@@ -12,13 +12,13 @@ class ProfileRepositoryImpl implements ProfileRepositoryInterface{
     try {
       User? userId = authRepository.getCurrentUser();
       final data = await supabaseService.init().from('profiles')
-          .select().eq('id', userId!.id);
+          .select().eq('id', userId!.id).single();
       if (kDebugMode) {
         print("get profile: $data");
       }
       return Profile.fromJson(data);
     } on Exception catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

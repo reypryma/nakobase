@@ -10,6 +10,8 @@ class EditGalleryPage extends StatefulWidget {
 class _EditGalleryPageState extends State<EditGalleryPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+
+    );
   }
 }

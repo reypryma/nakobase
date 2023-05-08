@@ -52,6 +52,11 @@ class AuthRepositoryImpl implements AuthRepositoryInterface{
   Future<void> signUpWithEmail({required String email, required String password, required String fullName}) async {
     try{
       await supabase.auth.signUp(email: email,password: password, data: {'full_name' : fullName});
+      supabase.auth.onAuthStateChange.listen((event) {
+        if (event.event == AuthChangeEvent.signedIn) {
+           logOut();
+        }
+      });
     } catch (error) {
         throw 'Unexpected error occurred $error';
     }

@@ -8,7 +8,7 @@ class TaskStatusProvider extends ChangeNotifier{
 
   Future<void> getStatusList() async{
     statusList = await taskStatusRepository.getListStatus();
-    print('################## ${statusList[0].id}');
+    print('################## ${statusList}');
     notifyListeners();
   }
 }

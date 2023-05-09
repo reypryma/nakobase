@@ -110,8 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             child: IconButton(
                               onPressed: () {},
-                              icon: const Icon(Icons.camera_alt_outlined,
-                                  color: white),
+                              icon: Icon(Icons.camera_alt_outlined,
+                                  color: icDarkBLue),
                             ),
                           ),
                         ),

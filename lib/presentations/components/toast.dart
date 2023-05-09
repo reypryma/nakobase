@@ -1,25 +1,20 @@
 import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void toast(
-    String? value, {
-      ToastGravity? gravity,
-      length = Toast.LENGTH_SHORT,
-      Color? bgColor,
-      Color? textColor,
-      bool print = false,
-    }) {
-    Fluttertoast.showToast(
-      msg: value!,
-      gravity: gravity,
-      toastLength: length,
-      backgroundColor: bgColor,
-      textColor: textColor,
-    );
+/// Toast Length
+/// Only for Android Platform
+enum Toast {
+  /// Show Short toast for 1 sec
+  LENGTH_SHORT,
+
+  /// Show Long toast for 5 sec
+  LENGTH_LONG
 }
 
+/// ToastGravity
+/// Used to define the position of the Toast on the screen
 enum ToastGravity {
   TOP,
   BOTTOM,
@@ -33,15 +28,6 @@ enum ToastGravity {
   SNACKBAR,
   NONE
 }
-
-enum Toast {
-  /// Show Short toast for 1 sec
-  LENGTH_SHORT,
-
-  /// Show Long toast for 5 sec
-  LENGTH_LONG
-}
-
 
 /// Plugin to show a toast message on screen
 /// Only for android, ios and Web platforms

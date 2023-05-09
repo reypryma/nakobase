@@ -35,6 +35,7 @@ const warningBG = Color(0xffFFA500);
 const infoBG = Color(0xff0096FF);
 const successIcon = Color(0xffa7d5d0);
 const failureBG = Color(0xffde323e);
+const ev_primary_color = Color(0xFF21D57C);
 
 const black = Color(0xff000000);
 const blackTrans95 = Color(0x95000000);
@@ -53,7 +54,6 @@ const shimmerItemColor = Color(0xff0c0c0d);
 const gray = Color(0xffa9aaac);
 const grayDark = Color(0xff454545);
 const lightGray = Color(0xffc3c3c3);
-const white = Color(0xffffffff);
 const whiteLight = Color(0xCCFAF9F6);
 const whiteTransparent = Color(0x50FFFFFF);
 
@@ -80,7 +80,7 @@ final kAccentColor = Config.accentColor;
 
 Color icScaffoldBgColor = const Color(0xFF464672);
 Color icLightBlue = const Color(0xFF4D4D7B);
-Color icWhiteColor = white;
+Color icWhiteColor = scaffoldColorLight;
 Color icNavyBlueColor = const Color(0xFF303065);
 Color icDarkBLue = Color(0xFF303065);
 Color icSkip = Colors.blue;

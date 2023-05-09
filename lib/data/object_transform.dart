@@ -39,7 +39,7 @@ T inject<T extends Object>() {
   return GetIt.I.get<T>();
 }
 
-Map<String, dynamic> addObjectToMap(
+Map<String, dynamic> addObjectToMap  (
     {required dynamic model, required String keyForNewModel, required Map<String, dynamic> originalMap}){
   originalMap[keyForNewModel] = model.toJson();
   return originalMap;

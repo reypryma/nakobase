@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nakobase/utils/constant.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
 import 'package:nakobase/utils/extra/text_style.dart';
 
@@ -54,4 +55,14 @@ Widget iconForPasswordNoButton(
   return isIconVisible
       ? iconButton
       : const SizedBox.shrink();
+}
+
+InputDecoration inputDecoration(BuildContext context, {String? hintText, InputBorder? inputBorder}) {
+  return InputDecoration(
+    border: inputBorder ?? OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+    hintText: hintText ?? 'Loading',
+    hintStyle: secondaryTextStyle(color: Colors.grey),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: ev_primary_color), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey), borderRadius: BorderRadius.circular(defaultRadius)),
+  );
 }

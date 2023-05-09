@@ -148,3 +148,11 @@ Widget nakoAppButton(BuildContext context, String title, Function onTap) {
     child: Text(title, style: boldTextStyle(color: Colors.white)),
   );
 }
+
+
+ButtonStyle getElevatedButtonStyle() {
+  return ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(ev_primary_color),
+    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius))),
+  );
+}

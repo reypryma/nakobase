@@ -13,6 +13,7 @@ import '../../data/menu_drawer.dart';
 import '../../utils/colors.dart';
 import '../../utils/styles.dart';
 import '../components/app_bar.dart';
+import '../routes.dart';
 
 class DashboardScreen extends StatefulWidget {
   bool? showAppbar;
@@ -53,6 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     } catch (e) {
       print('Error fetch task status $e');
     }
+    setState(() { });
   }
 
   @override
@@ -66,6 +68,17 @@ class _DashboardScreenState extends State<DashboardScreen>
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: kTeal50,
+      floatingActionButton: (selectedIndex == 0) ? FloatingActionButton(
+        heroTag: '1',
+        elevation: 5,
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.create_todo);
+        },
+        child: const Icon(
+          Icons.add,
+          color: appPrimaryColor,
+        ),
+      ) : const SizedBox.shrink(),
       body: DrawerWrapper(
         controller: _controller!,
         drawerItems: Provider.of<MenuDrawerProvider>(context, listen: false).listMenus(),

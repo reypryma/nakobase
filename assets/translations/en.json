@@ -19,12 +19,17 @@
   "profile": "Profile",
 
 
-  "add_gallery": "Add Gallery",
-  "Gallery": "Gallery",
-  "delete_gallery": "Delete Gallery",
+  "add_todo": "Add Todo",
+  "Todo": "Todo",
+  "delete_todo": "Delete Todo",
   "delete": "Delete",
   "create": "Create",
   "Update": "Update",
+
+
+  "enter_todo_titles": "Enter Todo Titles",
+  "todo_titles": "Todo Titles",
+  "this_required": "This field is required",
 
   "name": "Name",
   "email": "Email",

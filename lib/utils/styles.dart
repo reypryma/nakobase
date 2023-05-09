@@ -8,6 +8,7 @@ const cSystemNavigationColor = Color.fromRGBO(20, 20, 20, 1.0);
 const primaryBlue = Color.fromRGBO(72, 163, 198, 1.0);
 const kTeal50 = Color(0xFFE0F2F1);
 const kTeal100 = Color(0xFF3FC1BE);
+const appPrimaryColor = Color(0xFF098677);
 const kDefaultBackgroundAvatar = '3FC1BE';
 const kDefaultTextColorAvatar = 'EEEEEE';
 const kDefaultAdminBackgroundAvatar = 'EEEEEE';

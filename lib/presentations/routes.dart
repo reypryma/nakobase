@@ -5,22 +5,26 @@ import 'package:nakobase/presentations/pages/dashboard_screen.dart';
 import 'package:nakobase/presentations/pages/login_page.dart';
 import 'package:nakobase/presentations/pages/profile_page.dart';
 import 'package:nakobase/presentations/pages/register_page.dart';
-import 'package:nakobase/presentations/pages/todo/create_gallery_page.dart';
-import 'package:nakobase/presentations/pages/todo/edit_gallery_page.dart';
+import 'package:nakobase/presentations/pages/todo/create_todo_page.dart';
+import 'package:nakobase/presentations/pages/todo/edit_todo_page.dart';
 import 'package:nakobase/presentations/pages/todo/list_todo_page.dart';
 
 class Routes{
   static Map<String, WidgetBuilder> getAll() => _routes;
 
-  static const String main_gallery = 'gallery_home';
+  static const String main_todo = 'todo_home';
   static const String dashboard = 'dashboard';
-  static const String edit_gallery = 'edit_gallery_page';
-  static const String create_gallery = 'create_gallery_page';
+  static const String edit_todo = 'edit_todo_page';
+  static const String create_todo = 'create_todo_page';
 
   // User
   static const String profile = 'profile';
   static const String login = 'login';
   static const String register = 'register';
+
+
+  // TodoModel
+
 
   static final Map<String, WidgetBuilder> _routes = {
 
@@ -28,9 +32,9 @@ class Routes{
       dashboard: (BuildContext context) => DashboardScreen(),
 
       // Gallery
-      main_gallery: (BuildContext context) => const ListTodoPage(),
-      edit_gallery: (BuildContext ctx) => const EditGalleryPage(),
-      create_gallery: (BuildContext ctx) => const CreateGalleryPage(),
+      main_todo: (BuildContext context) => const ListTodoPage(),
+      edit_todo: (BuildContext ctx) => const EditTodoPage(),
+      create_todo: (BuildContext ctx) => const CreateTodoPage(),
 
       login: (BuildContext ctx) {
         var data = ModalRoute.of(ctx)!.settings.arguments as String;

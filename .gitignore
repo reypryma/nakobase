@@ -9,7 +9,7 @@
 .buildlog/
 .history
 .svn/
-.sql.txt
+sql.txt
 migrate_working_dir/
 
 # IntelliJ related

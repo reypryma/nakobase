@@ -6,9 +6,11 @@ import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/presentations/extensions/widget_extension.dart';
 import 'package:nakobase/presentations/pages/profile/avatar_upload_page.dart';
+import 'package:nakobase/services/providers/profile_provider.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/colors.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
+import 'package:provider/provider.dart' as p;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/models/profile.dart';
@@ -27,6 +29,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // User? currentUser;
+  ProfileProvider? profileProvider;
   Profile? profile;
   bool isLoading = true;
   double hBox = 30;
@@ -53,14 +56,21 @@ class _ProfilePageState extends State<ProfilePage> {
   // }
 
   init() async {
-    isLoading = true;
-    profile = await profileRepository.getUserProfile().whenComplete(() async {
+    profileProvider = p.Provider.of<ProfileProvider>(context, listen: false);
+    await profileProvider?.getCurrentProfile().whenComplete((){
+      profile = profileProvider?.profile;
       avatarProfile = profile?.avatarUrl;
-      print('avatar profile ${avatarProfile}');
       setState(() {
         isLoading = false;
       });
     });
+    // profile = await profileRepository.getUserProfile().whenComplete(() async {
+    //   avatarProfile = profile?.avatarUrl;
+    //   print('avatar profile $avatarProfile');
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // });
   }
 
   @override
@@ -208,12 +218,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 data['website'] = websiteController.text.trim();
               }
               print('the user sending $data');
+              setState(() {isLoading = true;});
               if(data.isNotEmpty){
                 await profileRepository
                     .updateUserInfo(data: data)
                     .then((value) => init());
               }
-              setState(() {});
+              setState(() {isLoading = false;});
               if (!mounted) {
                 return;
               }

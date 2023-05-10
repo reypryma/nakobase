@@ -10,7 +10,7 @@ class ProfileRepositoryImpl implements ProfileRepositoryInterface{
   @override
   Future<Profile?> getUserProfile() async{
     try {
-      User? userId = authRepository.getCurrentUser();
+      User? userId = supabaseService.init().auth.currentUser;
       final data = await supabaseService.init().from('profiles')
           .select().eq('id', userId!.id).single();
       if (kDebugMode) {
@@ -18,7 +18,8 @@ class ProfileRepositoryImpl implements ProfileRepositoryInterface{
       }
       return Profile.fromJson(data);
     } on Exception catch (e) {
-      rethrow;
+      print('Error get user profile');
+      throw 'error $e';
     }
   }
 

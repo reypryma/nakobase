@@ -27,11 +27,20 @@ class SupabaseServiceImp implements SupabaseServiceContract {
 
       if(expirationTime.isAfter(currentTime)){
         print('refresh session');
+        refreshSession();
         // refreshSession();
       }
-      refreshSession();
       return true;
     }else{
+      return false;
+    }
+  }
+
+  @override
+  bool checkAuthUser() {
+    if (supabaseClient.auth.currentUser != null) {
+      return true;
+    }  else{
       return false;
     }
   }

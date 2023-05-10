@@ -8,6 +8,7 @@ import 'package:nakobase/presentations/pages/dashboard_screen.dart';
 import 'package:nakobase/presentations/pages/login_page.dart';
 import 'package:nakobase/presentations/routes.dart';
 import 'package:nakobase/services/providers/menu_drawer_provider.dart';
+import 'package:nakobase/services/providers/profile_provider.dart';
 import 'package:nakobase/services/providers/task_status_provider.dart';
 import 'package:nakobase/translations/codegen_loader.g.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<MenuDrawerProvider>(create: (_) => menuDrawerProvider),
         ChangeNotifierProvider<TaskStatusProvider>(create: (_) => TaskStatusProvider()),
+        ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -69,77 +71,6 @@ class MyApp extends StatelessWidget {
         routes: Routes.getAll(),
         home: (!supabaseService.checkSession()) ? const LoginPage(title: LocaleKeys.login) : DashboardScreen(),
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Counter counter = Counter();
-
-  void _incrementCounter() {
-    setState(() {
-      counter.incrementCounter();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          InkWell(
-            child: TextButton.icon(
-              icon: const Icon(Icons.settings, color: scaffoldColorDark),
-              onPressed: () async {
-                await updateLanguage(context);
-                setState(() {
-
-                });
-              }, label: Text(getISOLanguageInfo(Localizations.localeOf(context)) ?? 'English', style: textLato(context, 16, blackTrans95),),
-            ),
-          )
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              LocaleKeys.you_pushed_the_button.tr(),
-            ),
-            Text(
-              '${counter.counter}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            AppButtonWidget(
-              height: 15,
-              text: 'Change To Indonesia',
-              focusColor: primaryLight,
-              splashColor: primaryLight,
-              hoverColor: primaryLight,
-              width: MediaQuery.of(context).size.width,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nakobase/core/models/profile.dart';
 import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/nsimages.dart';
 import 'package:nakobase/presentations/components/app_bar.dart';
@@ -8,9 +9,12 @@ import 'package:nakobase/presentations/components/app_button.dart';
 import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/presentations/routes.dart';
+import 'package:nakobase/services/providers/profile_provider.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/extra/CustomSnackBar.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
+import 'package:provider/provider.dart' as p;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/styles.dart';
@@ -144,11 +148,10 @@ class _LoginPageState extends State<LoginPage> {
                 nakoAppButton(context, LocaleKeys.login_to_continue.tr(), () async {
                   try {
                     // print('email ${emailController.text.trim()}, password ${passwordController.text.trim()}');
-                    await authRepository.loginWithEmail(email: emailController.text.trim(), password: passwordController.text.trim()).then((value){
+                    await authRepository.loginWithEmail(email: emailController.text.trim(), password: passwordController.text.trim()).whenComplete(() async {
                                         showCustomSnackBar('Success to login', context, isError: false);
+                                        await p.Provider.of<ProfileProvider>(context, listen: false).getCurrentProfile();
                                         Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
-                                      }).onError((error, stackTrace){
-                                        showCustomSnackBar("$error", context, );
                                       });
                   } catch (e) {
                     print(e);
@@ -172,23 +175,21 @@ class _LoginPageState extends State<LoginPage> {
                     side: BorderSide(color: Colors.grey[300]!),
                   ),
                   onTap: () async {
-                    try {
-                      await authRepository.loginWithGoogle().whenComplete(() async{
-                        // showCustomSnackBar('Success to login', context, isError: false);
+                    await authRepository.loginWithGoogle();
+                    supabaseService.init().auth.onAuthStateChange.listen((event) {
+                      if (event.event == AuthChangeEvent.signedIn) {
                         Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
-                        setState(() { });
-                        if(supabaseService.checkSession()){
-
-                        }else{
-                          showCustomSnackBar('Error', context, );
-                        }
-                      });
-                      if (!mounted) {
-                        return;
                       }
-                    } catch (e) {
-                      showCustomSnackBar(LocaleKeys.login, context, isError: false);
-                    }
+                    });
+
+                    // try {
+                    //   await authRepository.loginWithGoogle();
+                    //   if(supabaseService.checkSession()){
+                    //     Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
+                    //   }
+                    // } catch (e) {
+                    //   showCustomSnackBar(LocaleKeys.login.tr(), context, isError: false);
+                    // }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

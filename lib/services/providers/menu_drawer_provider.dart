@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:nakobase/data/menu_drawer.dart';
 
 class MenuDrawerProvider extends ChangeNotifier{
-  int _selectedItem = 0;
+  int _selectedItem = 1;
 
   int get selectedItem => _selectedItem;
 

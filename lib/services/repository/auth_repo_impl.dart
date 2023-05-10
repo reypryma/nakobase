@@ -19,6 +19,9 @@ class AuthRepositoryImpl implements AuthRepositoryInterface{
   Future<bool> logOut() async {
     try {
       await supabase.auth.signOut().then((value) => session = null);
+      // if(supabase.auth.currentSession != null){
+      //   supabase.auth.setSession(null);
+      // }
       return true;
     } on Exception {
       print('Error on logout $Exception');

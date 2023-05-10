@@ -5,6 +5,7 @@ import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/data/nsimages.dart';
 import 'package:nakobase/presentations/components/app_bar.dart';
 import 'package:nakobase/presentations/components/app_button.dart';
+import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/presentations/routes.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
@@ -92,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 TextFormField(
                   focusNode: passwordNode,
+                  controller: passwordController,
                   autofocus: false,
                   obscureText: showPassword ? false : true,
                   onFieldSubmitted: (term) {
@@ -140,12 +142,17 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 80),
                 nakoAppButton(context, LocaleKeys.login_to_continue.tr(), () async {
-                  authRepository.loginWithEmail(email: emailController.text.trim(), password: passwordController.text.trim()).then((value){
-                    customSnackBar(context, 'Success to login');
-                    Navigator.popAndPushNamed(context, Routes.dashboard);
-                  }).onError((error, stackTrace){
-                    customSnackBar(context, "Error on login");
-                  });
+                  try {
+                    // print('email ${emailController.text.trim()}, password ${passwordController.text.trim()}');
+                    await authRepository.loginWithEmail(email: emailController.text.trim(), password: passwordController.text.trim()).then((value){
+                                        showCustomSnackBar('Success to login', context, isError: false);
+                                        Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
+                                      }).onError((error, stackTrace){
+                                        showCustomSnackBar("$error", context, );
+                                      });
+                  } catch (e) {
+                    print(e);
+                  }
                 }),
                 const SizedBox(height: 40),
                 Row(
@@ -166,13 +173,21 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onTap: () async {
                     try {
-                      await authRepository.loginWithGoogle();
+                      await authRepository.loginWithGoogle().whenComplete(() async{
+                        // showCustomSnackBar('Success to login', context, isError: false);
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
+                        setState(() { });
+                        if(supabaseService.checkSession()){
+
+                        }else{
+                          showCustomSnackBar('Error', context, );
+                        }
+                      });
                       if (!mounted) {
                         return;
                       }
-                      Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
                     } catch (e) {
-                      customSnackBar(context, '$e');
+                      showCustomSnackBar(LocaleKeys.login, context, isError: false);
                     }
                   },
                   child: Row(

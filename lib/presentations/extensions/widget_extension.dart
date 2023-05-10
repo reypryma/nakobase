@@ -20,6 +20,12 @@ extension WidgetExtension on Widget?{
     );
   }
 
+  /// return padding left
+  Padding paddingLeft(double left) {
+    return Padding(padding: EdgeInsets.only(left: left), child: this);
+  }
+
+
   /// add corner radius
   ClipRRect cornerRadiusWithClipRRect(double radius) {
     return ClipRRect(

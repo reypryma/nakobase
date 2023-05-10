@@ -29,12 +29,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   CustomDrawerController? _controller;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDrawerOpen = false;
-  int selectedItem = 0;
 
-  final tabs = [
-    const ListTodoPage(),
-    const ProfilePage(),
-  ];
+  late final tabs = [];
 
   @override
   void initState() {
@@ -43,6 +39,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   Future<void> init() async {
+    tabs.addAll([ListTodoPage(), ProfilePage()]);
+
     _controller = CustomDrawerController(
         vsync: this, duration: const Duration(milliseconds: 250))
       ..addListener(() {
@@ -54,7 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     } catch (e) {
       print('Error fetch task status $e');
     }
-    setState(() { });
+    // setState(() { });
   }
 
   @override

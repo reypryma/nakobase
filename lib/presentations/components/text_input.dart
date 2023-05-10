@@ -4,6 +4,7 @@ import 'package:nakobase/utils/extra/extra_commons.dart';
 import 'package:nakobase/utils/extra/text_style.dart';
 
 import '../../utils/colors.dart';
+import '../../utils/styles.dart';
 
 InputDecoration buildInputDecoration(
     {String? name,
@@ -65,4 +66,44 @@ InputDecoration inputDecoration(BuildContext context, {String? hintText, InputBo
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: ev_primary_color), borderRadius: BorderRadius.circular(defaultRadius)),
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey), borderRadius: BorderRadius.circular(defaultRadius)),
   );
+}
+
+/// rounded box decoration with shadow
+Decoration boxDecorationRoundedWithShadow(
+    int radiusAll, {
+      Color backgroundColor = kLightPrimary,
+      Color? shadowColor,
+      double? blurRadius,
+      double? spreadRadius,
+      Offset offset = const Offset(0.0, 0.0),
+      LinearGradient? gradient,
+    }) {
+  return BoxDecoration(
+    boxShadow: defaultBoxShadow(
+      shadowColor: shadowColor ?? shadowColorGlobal,
+      blurRadius: blurRadius ?? defaultBlurRadius,
+      spreadRadius: spreadRadius ?? defaultSpreadRadius,
+      offset: offset,
+    ),
+    color: backgroundColor,
+    gradient: gradient,
+    borderRadius: radius(radiusAll.toDouble()),
+  );
+}
+
+/// default box shadow
+List<BoxShadow> defaultBoxShadow({
+  Color? shadowColor,
+  double? blurRadius,
+  double? spreadRadius,
+  Offset offset = const Offset(0.0, 0.0),
+}) {
+  return [
+    BoxShadow(
+      color: shadowColor ?? shadowColorGlobal,
+      blurRadius: blurRadius ?? defaultBlurRadius,
+      spreadRadius: spreadRadius ?? defaultSpreadRadius,
+      offset: offset,
+    )
+  ];
 }

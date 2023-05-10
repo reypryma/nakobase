@@ -44,4 +44,25 @@ class TodoRepositoryImp implements TodoRepositoryInterface{
       rethrow;
     }
   }
+
+  @override
+  Future createTodo({required String title, required String statusId}) async{
+    try {
+      String userId = supabaseService.init().auth.currentUser!.id;
+      await supabaseService.init().from('todos').insert({'title': title, 'status_id': statusId, 'user_id':userId});
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future deleteTodo({required int id}) async{
+      try {
+        String userId = authRepository.getCurrentUser()!.id;
+        await supabaseService.init().from('todos').delete().match({'id': id, 'user_id': userId});
+      } catch (e) {
+        print(e);
+      }
+  }
 }

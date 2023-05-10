@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nakobase/core/models/task_status.dart';
+import 'package:nakobase/core/service_locator.dart';
 import 'package:nakobase/presentations/components/app_button.dart';
 import 'package:nakobase/presentations/components/snackbar.dart';
 import 'package:nakobase/presentations/components/text_input.dart';
@@ -14,7 +15,6 @@ import '../../../utils/colors.dart';
 import '../../../utils/styles.dart';
 import '../../components/app_bar.dart';
 import '../../components/shimmer_layout.dart';
-import '../../components/toast.dart';
 
 class CreateTodoPage extends StatefulWidget {
   const CreateTodoPage({Key? key}) : super(key: key);
@@ -53,6 +53,12 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
   }
 
   @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double widthContext = MediaQuery.of(context).size.width;
 
@@ -63,7 +69,7 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
           const SizedBox(
             height: 10,
           ),
-          Text('Status', style: boldTextStyle(color: kDarkTextColor)),
+          ShimmerTextComponent(width: widthContext, height: 20,),
           const SizedBox(
             height: 10,
           ),
@@ -140,9 +146,13 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
+                          await todoRepository.createTodo(title: titleController.text, statusId: selectedStatus.id.toString());
+                          if (!mounted) {
+                            return;
+                          }
                           Navigator.pop(context);
                           showCustomSnackBar(LocaleKeys.add_todo.tr(), context, isError: false);
                         }

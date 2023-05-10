@@ -2,18 +2,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nakobase/presentations/components/circular.dart';
 import 'package:nakobase/presentations/components/shimmer_layout.dart';
+import 'package:nakobase/presentations/components/snackbar.dart';
+import 'package:nakobase/presentations/components/text_input.dart';
 import 'package:nakobase/presentations/extensions/widget_extension.dart';
+import 'package:nakobase/presentations/pages/profile/avatar_upload_page.dart';
 import 'package:nakobase/translations/locale_keys.g.dart';
 import 'package:nakobase/utils/colors.dart';
-import 'package:nakobase/utils/commons.dart';
-import 'package:nakobase/utils/extra/CustomSnackBar.dart';
 import 'package:nakobase/utils/extra/extra_commons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/models/profile.dart';
 import '../../core/service_locator.dart';
 import '../../utils/styles.dart';
 import '../components/app_button.dart';
 import '../components/dialog.dart';
+import '../components/divider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -27,6 +30,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Profile? profile;
   bool isLoading = true;
   double hBox = 30;
+  String? avatarProfile;
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController websiteController = TextEditingController();
 
   @override
   void initState() {
@@ -46,7 +53,10 @@ class _ProfilePageState extends State<ProfilePage> {
   // }
 
   init() async {
-    profile = await profileRepository.getUserProfile().whenComplete(() {
+    isLoading = true;
+    profile = await profileRepository.getUserProfile().whenComplete(() async {
+      avatarProfile = profile?.avatarUrl;
+      print('avatar profile ${avatarProfile}');
       setState(() {
         isLoading = false;
       });
@@ -60,16 +70,44 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget shimmeringInfo(String? infoProfile, {double? hWidth}) {
-      return !isLoading
-          ? Text(
-        infoProfile ?? "not found",
-        style: secondaryTextStyle(color: kDarkBgDark, size: 18),
-      )
-          : ShimmerTextComponent(
-        width: hWidth ?? MediaQuery.of(context).size.width * .4,
-        height: hBox,
+    Widget mInput(var mLabel, TextEditingController textController) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(0, 16, 10, 16),
+        child: TextField(
+          controller: textController,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(0.0),
+            isDense: true,
+            hintText: mLabel,
+            border: InputBorder.none,
+          ),
+        ),
       );
+    }
+
+    /// Called when image has been uploaded to Supabase storage from within Avatar widget
+    Future<void> _onUpload(String imageUrl) async {
+      try {
+        final userId = authRepository.getCurrentUser()!.id;
+        await supabaseService.init().from('profiles').upsert({
+          'id': userId,
+          'avatar_url': imageUrl,
+        });
+        if (mounted) {
+          context.showSnackBar(message: 'Updated your profile image!');
+        }
+      } on PostgrestException catch (error) {
+        context.showErrorSnackBar(message: error.message);
+      } catch (error) {
+        context.showErrorSnackBar(message: 'Unexpected error has occurred');
+      }
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        avatarProfile = imageUrl;
+      });
     }
 
     return Scaffold(
@@ -88,7 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               isLoading
                   ? progressIndicator()
-                  : Stack(
+                  :
+/*              Stack(
                       alignment: Alignment.topCenter,
                       children: [
                         commonCachedNetworkImage(
@@ -119,20 +158,40 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 20,
                         ),
                       ],
+                    ).center(),*/
+                  Avatar(
+                      imageUrl: avatarProfile ?? (profile?.avatarUrl ?? ''),
+                      onUpload: _onUpload,
                     ).center(),
-              const SizedBox(
-                height: 20,
-              ),
-              shimmeringInfo(profile?.fullName ?? 'Loading Username'),
-              const SizedBox(height: 20),
-              shimmeringInfo(profile?.website?? 'no website'),
+              buildDivider(isFull: true),
+              !isLoading
+                  ? Container(
+                      decoration: boxDecorationRoundedWithShadow(8,
+                          backgroundColor: Theme.of(context).cardColor),
+                      padding: const EdgeInsets.all(16.0),
+                      margin: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          mInput(profile?.fullName, usernameController),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          mInput(profile?.website ?? 'no website',
+                              websiteController),
+                        ],
+                      ),
+                    )
+                  : ShimmerTextComponent(
+                      width: MediaQuery.of(context).size.width * .4,
+                      height: 300,
+                    )
             ],
           )),
       bottomNavigationBar: AppButton(
         height: 50,
         width: 30,
         elevation: 2,
-        text: 'Update User',
+        text: LocaleKeys.update_profile.tr(),
         color: SHScaffoldDarkColor,
         textStyle: boldTextStyle(color: kBadgeColor),
         padding: const EdgeInsets.only(bottom: 16, top: 16),
@@ -140,8 +199,25 @@ class _ProfilePageState extends State<ProfilePage> {
           await showConfirmDialog(
             context,
             'You want to?',
-            onAccept: () {
-              customSnackBar(context, 'Success');
+            onAccept: () async {
+              Map<String, dynamic> data = {};
+              if (usernameController.text.trim().isNotEmpty) {
+                data['full_name'] = usernameController.text.trim();
+              }
+              if (websiteController.text.trim().isNotEmpty) {
+                data['website'] = websiteController.text.trim();
+              }
+              print('the user sending $data');
+              if(data.isNotEmpty){
+                await profileRepository
+                    .updateUserInfo(data: data)
+                    .then((value) => init());
+              }
+              setState(() {});
+              if (!mounted) {
+                return;
+              }
+              showCustomSnackBar('Success', context, isError: false);
             },
           );
         },

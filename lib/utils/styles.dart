@@ -199,3 +199,8 @@ ThemeData buildLightTheme(BuildContext context) {
         .copyWith(error: kErrorRed),
   );
 }
+
+Color shadowColorGlobal = Colors.grey.withOpacity(0.2);
+double defaultBlurRadius = 4.0;
+double defaultSpreadRadius = 1.0;
+double defaultAppBarElevation = 4.0;

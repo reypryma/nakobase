@@ -11,6 +11,9 @@ abstract class  LocaleKeys {
   static const dont_have_account = 'dont_have_account';
   static const already_have_account = 'already_have_account';
   static const welcome_back = 'welcome_back';
+  static const update_profile = 'update_profile';
+  static const update = 'update';
+  static const update_image = 'update_image';
   static const google = 'google';
   static const login = 'login';
   static const signup = 'signup';

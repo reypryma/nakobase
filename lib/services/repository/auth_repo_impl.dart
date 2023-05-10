@@ -18,11 +18,12 @@ class AuthRepositoryImpl implements AuthRepositoryInterface{
   @override
   Future<bool> logOut() async {
     try {
-      await supabase.auth.signOut();
+      await supabase.auth.signOut().then((value) => session = null);
+      return true;
     } on Exception {
+      print('Error on logout $Exception');
       return false;
     }
-    return true;
   }
 
 
@@ -44,6 +45,7 @@ class AuthRepositoryImpl implements AuthRepositoryInterface{
     try {
       await supabase.auth.signInWithPassword(email: email,password: password);
     } on Exception catch (e) {
+      print('failed to login $e');
       throw 'Exception $e';
     }
   }

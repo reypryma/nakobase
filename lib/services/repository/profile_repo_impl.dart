@@ -23,9 +23,14 @@ class ProfileRepositoryImpl implements ProfileRepositoryInterface{
   }
 
   @override
-  Future<void> updateUserInfo(Map data) {
-    // TODO: implement updateUserInfo
-    throw UnimplementedError();
+  Future<void> updateUserInfo({required Map data}) async{
+    User? userId = authRepository.getCurrentUser();
+     try {
+       await supabaseService.init().from('profiles')
+          .update(data).match({'id': userId!.id});
+     } on Exception catch (e) {
+       rethrow;
+     }
   }
 
 }

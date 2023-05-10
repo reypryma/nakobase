@@ -81,10 +81,15 @@ class _RegisterPageState extends State<RegisterPage> {
     validateForm() async {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        await authRepository.signUpWithEmail(
-            email: emailController.text.trim(),
-            password: passCtrl.text.trim(),
-            fullName: nameController.text.trim());
+        try {
+          await authRepository.signUpWithEmail(
+              email: emailController.text.trim(),
+              password: passCtrl.text.trim(),
+              fullName: nameController.text.trim());
+        } on Exception catch (e) {
+          showCustomSnackBar('$e', context);
+          rethrow;
+        }
         if (!mounted) {
           return;
         }

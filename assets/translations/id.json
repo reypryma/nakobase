@@ -11,6 +11,7 @@
   "dont_have_account": "tidak punya akun {}?  ",
   "already_have_account": "sudah ada {}?  ",
   "welcome_back": "Selamat Datang Kembali",
+  "update_profile": "Perbarui Profil",
 
   "google": "Google",
   "login": "Masuk",
@@ -24,7 +25,10 @@
   "delete_todo": "Delete Tugas",
   "delete": "Hapus",
   "create": "Buat",
-  "update": "Perbarui",
+  "update": "perbarui",
+  "Update": "Perbarui",
+
+  "update_image": "Perbarui gambar",
 
   "enter_todo_titles": "Masukkan Judul Todo",
   "todo_titles": "Judul Todo",

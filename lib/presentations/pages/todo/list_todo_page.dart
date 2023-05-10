@@ -9,6 +9,7 @@ import 'package:nakobase/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class ListTodoPage extends StatefulWidget {
+
   const ListTodoPage({Key? key}) : super(key: key);
 
   @override
@@ -21,19 +22,16 @@ class _ListTodoPageState extends State<ListTodoPage> {
 
   @override
   void initState() {
-    init();
     super.initState();
+    init();
   }
 
-  Future init() async {
+  Future<void> init() async {
     try {
       readStream = todoRepository.listTodos();
-      // await todoRepository.readTodos();
+      await todoRepository.readTodos();
     } catch (e) {
-      showCustomSnackBar(
-        '$e',
-        context,
-      );
+
     }
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
@@ -48,11 +46,22 @@ class _ListTodoPageState extends State<ListTodoPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return (isLoading == false)
         ? StreamBuilder(
             stream: readStream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: icNavyBlueColor,
+                  ),
+                );
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 3,
@@ -70,18 +79,7 @@ class _ListTodoPageState extends State<ListTodoPage> {
                 return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, int index) {
-                      // Map<String, dynamic> todoJson = snapshot.data![index]; // var {} map todo
-                      //
-                      // // int statusIndex = int.parse(todoJson['status_id'].toString())-1;
-                      // int statusIndex = int.parse( snapshot.data![index]['status_id'].toString())-1;
-                      // print('status statusIndex : $statusIndex');
-                      //
-                      // todoJson['status'] = Provider.of<TaskStatusProvider>(context, listen: false).statusList[statusIndex].toJson(); // var {} map status
-                      // print('task status to get: ${todoJson['status']} where the map of todo $todoJson');
-                      //
-                      // Todo todoObject = Todo.fromJSON(todoJson);
-                      // print('I got the ${todoObject.status.taskStatusName} and ${todoObject.title}');
-                      Future.delayed(Duration(seconds: 2));
+                      Future.delayed(const Duration(seconds: 2));
                       final newTodoJson = addObjectToMap(
                           model: Provider.of<TaskStatusProvider>(context,
                                   listen: false)
@@ -92,8 +90,24 @@ class _ListTodoPageState extends State<ListTodoPage> {
                           keyForNewModel: 'status',
                           originalMap: snapshot.data![index]);
 
-                      return SingleTodoComponent(
-                        todo: Todo.fromJSON(newTodoJson),
+                      return Dismissible(
+                        key: UniqueKey(),
+                        onDismissed: (DismissDirection direction) async{
+                          try {
+                            print('get ${ snapshot.data![index]['id']}');
+                            await todoRepository.deleteTodo(id: snapshot.data![index]['id']).whenComplete(() => showCustomSnackBar('Success delete', context));
+                          } on Exception catch (e) {
+                            showCustomSnackBar("$e", context);
+                          }
+                          setState(
+                                () {
+
+                            },
+                          );
+                        },
+                        child: SingleTodoComponent(
+                          todo: Todo.fromJSON(newTodoJson),
+                        ),
                       );
                     });
               }
@@ -104,7 +118,7 @@ class _ListTodoPageState extends State<ListTodoPage> {
                 );
               }
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Text("No data available"),
               );
             })
         : Center(
@@ -113,6 +127,5 @@ class _ListTodoPageState extends State<ListTodoPage> {
               color: icNavyBlueColor,
             ),
           );
-    ;
   }
 }

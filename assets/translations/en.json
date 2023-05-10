@@ -11,6 +11,10 @@
   "dont_have_account": "don't have {} account?  ",
   "already_have_account": "Have {} account?  ",
   "welcome_back": "Welcome Back",
+  "update_profile": "Update Profile",
+
+  "update": "Update",
+  "update_image": "Update Image",
 
   "google": "Google",
   "login": "Login",
